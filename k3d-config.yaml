@@ -1,0 +1,25 @@
+# k3d configuration file, saved as e.g. /home/me/myk3dcluster.yaml
+apiVersion: k3d.io/v1alpha5 # this will change in the future as we make everything more stable
+kind: Simple # internally, we also have a Cluster config, which is not yet available externally
+metadata:
+  name: mycluster
+servers: 1 # same as `--servers 1`
+agents: 5 # same as `--agents 2`
+options:
+  k3d: # k3d runtime settings
+    disableLoadbalancer: true # same as `--no-lb`
+  k3s: # options passed on to K3s itself
+    extraArgs: # additional arguments passed to the `k3s server|agent` command; same as `--k3s-arg`
+      - arg: --disable=cloud-controller
+        nodeFilters:
+          - server:*
+      - arg: --disable=helm-controller
+        nodeFilters:
+          - server:*
+      - arg: --disable=traefik
+        nodeFilters:
+          - server:*
+    nodeLabels:
+      - label: glueops.dev/role=glueops-platform # same as `--k3s-node-label 'foo=bar@agent:1'` -> this results in a Kubernetes node label
+        nodeFilters:
+          - agent:1,2,3

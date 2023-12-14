@@ -1,0 +1,18 @@
+apiVersion: chisel-operator.io/v1
+kind: ExitNodeProvisioner
+metadata:
+  name: digitalocean
+  namespace: default
+spec:
+  DigitalOcean:
+    auth: digitalocean
+    region: sgp1
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: dgapikey
+type: Opaque
+data:
+  auth: <base64encodedkey>
+---
